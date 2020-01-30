@@ -39,12 +39,12 @@ public class JdbcTimeEntryRepositoryTest {
         TimeEntry newTimeEntry = new TimeEntry(123, 321, LocalDate.parse("2017-01-09"), 8);
         TimeEntry entry = subject.create(newTimeEntry);
 
-        Map<String, Object> foundEntry = jdbcTemplate.queryForMap("Select * from time_entries where id = ?", entry.getId());
+        Map<String, Object> foundEntry = jdbcTemplate.queryForMap("SELECT * FROM time_entries WHERE id = ?", entry.getId());
 
         assertThat(foundEntry.get("id")).isEqualTo(entry.getId());
         assertThat(foundEntry.get("project_id")).isEqualTo(123L);
         assertThat(foundEntry.get("user_id")).isEqualTo(321L);
-        assertThat(((Date)foundEntry.get("date")).toLocalDate()).isEqualTo(LocalDate.parse("2017-01-09"));
+        assertThat(((Date) foundEntry.get("date")).toLocalDate()).isEqualTo(LocalDate.parse("2017-01-09"));
         assertThat(foundEntry.get("hours")).isEqualTo(8);
     }
 
@@ -135,12 +135,12 @@ public class JdbcTimeEntryRepositoryTest {
 
         TimeEntry timeEntry = subject.update(1000L, updatedTimeEntry);
 
-        Map<String, Object> foundEntry = jdbcTemplate.queryForMap("Select * from time_entries where id = ?", timeEntry.getId());
+        Map<String, Object> foundEntry = jdbcTemplate.queryForMap("SELECT * FROM time_entries WHERE id = ?", timeEntry.getId());
 
         assertThat(foundEntry.get("id")).isEqualTo(timeEntry.getId());
         assertThat(foundEntry.get("project_id")).isEqualTo(456L);
         assertThat(foundEntry.get("user_id")).isEqualTo(322L);
-        assertThat(((Date)foundEntry.get("date")).toLocalDate()).isEqualTo(LocalDate.parse("2017-01-10"));
+        assertThat(((Date) foundEntry.get("date")).toLocalDate()).isEqualTo(LocalDate.parse("2017-01-10"));
         assertThat(foundEntry.get("hours")).isEqualTo(10);
     }
 
@@ -153,9 +153,9 @@ public class JdbcTimeEntryRepositoryTest {
 
         subject.delete(999L);
 
-        Map<String, Object> notFoundEntry = jdbcTemplate.queryForMap("Select count(*) count from time_entries where id = ?", 999);
+        Map<String, Object> notFoundEntry = jdbcTemplate.queryForMap("SELECT count(*) count FROM time_entries WHERE id = ?", 999);
         assertThat(notFoundEntry.get("count")).isEqualTo(0L);
-        Map<String, Object> foundEntry = jdbcTemplate.queryForMap("Select count(*) count from time_entries where id = ?", 888);
+        Map<String, Object> foundEntry = jdbcTemplate.queryForMap("SELECT count(*) count FROM time_entries WHERE id = ?", 888);
         assertThat(foundEntry.get("count")).isEqualTo(1L);
     }
 }
